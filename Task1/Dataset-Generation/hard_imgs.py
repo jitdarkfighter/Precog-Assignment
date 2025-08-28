@@ -13,17 +13,9 @@ image_size = (200,80)
 font_size = 40
 num_samples = 100
 
-# Extended font list with 11 working fonts for more diversity
-font_paths = [
-    '/usr/share/fonts/liberation/LiberationSans-Regular.ttf',
-    '/usr/share/fonts/liberation/LiberationSerif-Regular.ttf', 
-    '/usr/share/fonts/liberation/LiberationMono-Regular.ttf',
-    '/usr/share/fonts/TTF/DejaVuSerif-Bold.ttf',
-    '/usr/share/fonts/TTF/DejaVuSans-Oblique.ttf',
-    '/usr/share/fonts/TTF/DejaVuSansCondensed-Bold.ttf',
-    '/usr/share/fonts/noto/NotoSans-Regular.ttf',
-    '/usr/share/fonts/noto/NotoSerif-Regular.ttf'
-]
+
+font_dir = "/usr/share/fonts/TTF"
+font_paths = [os.path.join(font_dir, font) for font in os.listdir(font_dir) if font.endswith(".ttf")]
 
 
 with open('Task0/ai_wordlist.txt', 'r') as f:
@@ -53,9 +45,9 @@ with open(output_file_path, mode = 'w', newline = '') as file:
 
     print(len(words))
     for word in words:
-        # 5 train images for each word
+        # 50 train images for each word
         original_word = word
-        for num_samples in range(5):
+        for num_samples in range(50):
             font_path = get_font()
             word = random_caps(word)
             image = Image.new('RGB', image_size, (255, 255, 255))
@@ -86,8 +78,8 @@ with open(output_file_path, mode = 'w', newline = '') as file:
 
     for word in words:
         original_word = word
-        # 2 images for each word in test dataset.
-        for num_samples in range(2):
+        # 15 images for each word in test dataset.
+        for num_samples in range(15):
             font_path = get_font()
             word = random_caps(word)
             image = Image.new('RGB', image_size, (255, 255, 255))

@@ -5,23 +5,18 @@ import random
 import string
 from PIL import Image, ImageDraw, ImageFont
 
-output_dir = 'Task0/captcha_images/hard'
-os.makedirs(output_dir, exist_ok=True)
+train_output_dir = 'Task1/captcha_images/train/hard'
+test_output_dir = 'Task1/captcha_images/test/hard'
+os.makedirs(train_output_dir, exist_ok=True)
+os.makedirs(test_output_dir, exist_ok=True)
 image_size = (200,80)
 font_size = 40
 num_samples = 100
 
-# Extended font list with 11 working fonts for more diversity
-font_paths = [
-    '/usr/share/fonts/liberation/LiberationSans-Regular.ttf',
-    '/usr/share/fonts/liberation/LiberationSerif-Regular.ttf', 
-    '/usr/share/fonts/liberation/LiberationMono-Regular.ttf',
-    '/usr/share/fonts/TTF/DejaVuSerif-Bold.ttf',
-    '/usr/share/fonts/TTF/DejaVuSans-Oblique.ttf',
-    '/usr/share/fonts/TTF/DejaVuSansCondensed-Bold.ttf',
-    '/usr/share/fonts/noto/NotoSans-Regular.ttf',
-    '/usr/share/fonts/noto/NotoSerif-Regular.ttf'
-]
+
+font_dir = "/usr/share/fonts/TTF"
+font_paths = [os.path.join(font_dir, font) for font in os.listdir(font_dir) if font.endswith(".ttf")]
+
 
 
 with open('Task0/ai_wordlist.txt', 'r') as f:
@@ -42,8 +37,8 @@ def random_caps(word):
 def get_font(font_paths = font_paths):
     return random.choice(font_paths)
 
-
-output_file_path = os.path.join(output_dir, 'labels.csv')
+# training images
+output_file_path = os.path.join("Task1/captcha_images/train", 'labels_hard.csv')
 i = 0
 with open(output_file_path, mode = 'w', newline = '') as file:
     writer = csv.writer(file)
@@ -51,25 +46,58 @@ with open(output_file_path, mode = 'w', newline = '') as file:
 
     print(len(words))
     for word in words:
-        font_path = get_font()
-        word = random_caps(word)
-        image = Image.new('RGB', image_size, (255, 255, 255))
-        draw = ImageDraw.Draw(image)
-        font = ImageFont.truetype(font_path, font_size)
+        # 5 train images for each word
+        original_word = word
+        for num_samples in range(5):
+            font_path = get_font()
+            word = random_caps(word)
+            image = Image.new('RGB', image_size, (255, 255, 255))
+            draw = ImageDraw.Draw(image)
+            font = ImageFont.truetype(font_path, font_size)
 
-        bbox = draw.textbbox((0, 0), word, font=font)
-        text_w, text_h = bbox[2] - bbox[0], bbox[3] - bbox[1]
-        position = ((image_size[0]-text_w)//2, (image_size[1]-text_h)//2)
+            bbox = draw.textbbox((0, 0), word, font=font)
+            text_w, text_h = bbox[2] - bbox[0], bbox[3] - bbox[1]
+            position = ((image_size[0]-text_w)//2, (image_size[1]-text_h)//2)
 
-        # Random rgb text color,which is suitable with white background
-        text_color = (random.randint(0, 100), random.randint(0, 100), random.randint(0, 100))
-        draw.text(position, word, fill=text_color, font=font)
+            # Random rgb text color,which is suitable with white background
+            text_color = (random.randint(0, 100), random.randint(0, 100), random.randint(0, 100))
+            draw.text(position, word, fill=text_color, font=font)
 
-        image = add_noise(image)
+            image = add_noise(image)
 
-        filename = f"img_{i}.png"
-        i+= 1
-        image.save(os.path.join(output_dir, filename))
-        writer.writerow([filename, word])
+            filename = f"img_{i}.png"
+            i+= 1
+            image.save(os.path.join(train_output_dir, filename))
+            writer.writerow([filename, original_word])
 
+# Test images
+output_file_path = os.path.join('Task1/captcha_images/test', 'labels_hard.csv')
+i = 0
+with open(output_file_path, mode = 'w', newline = '') as file:
+    writer = csv.writer(file)
+    writer.writerow(['filename', 'label'])
 
+    for word in words:
+        original_word = word
+        # 2 images for each word in test dataset.
+        for num_samples in range(2):
+            font_path = get_font()
+            word = random_caps(word)
+            image = Image.new('RGB', image_size, (255, 255, 255))
+            draw = ImageDraw.Draw(image)
+            font = ImageFont.truetype(font_path, font_size)
+
+            bbox = draw.textbbox((0, 0), word, font=font)
+            text_w, text_h = bbox[2] - bbox[0], bbox[3] - bbox[1]
+            position = ((image_size[0]-text_w)//2, (image_size[1]-text_h)//2)
+
+            # Random rgb text color,which is suitable with white background
+            text_color = (random.randint(0, 100), random.randint(0, 100), random.randint(0, 100))
+            draw.text(position, word, fill=text_color, font=font)
+
+            image = add_noise(image)
+
+            filename = f"img_{i}.png"
+            i+= 1
+            image.save(os.path.join(test_output_dir, filename))
+            writer.writerow([filename, original_word])
