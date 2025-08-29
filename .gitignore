@@ -1,6 +1,6 @@
 # Files
 /Task1/captcha_images.zip
-
+/Task2/captcha_images
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

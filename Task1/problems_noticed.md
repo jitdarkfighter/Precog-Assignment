@@ -5,4 +5,4 @@
 
 - Tested with increased data on the 6m parameter model -> again overfitting
 
-- Got a first working version after using 50 images per class for training. 
+- Got a first working version after using 50 images per class for training with 500k params
