@@ -18,7 +18,7 @@ font_dir = "/usr/share/fonts/TTF"
 font_paths = [os.path.join(font_dir, font) for font in os.listdir(font_dir) if font.endswith(".ttf")]
 
 
-with open('Task0/ai_wordlist.txt', 'r') as f:
+with open('Task1/ai_wordlist.txt', 'r') as f:
     words = [line.strip() for line in f.readlines()]
 
 

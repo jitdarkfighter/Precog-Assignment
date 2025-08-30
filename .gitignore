@@ -1,6 +1,11 @@
 # Files
 /Task1/captcha_images.zip
+/Task1/captcha_images
 /Task2/captcha_images
+/Task2/wordlist_captcha_images
+/Task2/captcha_images.zip
+/Task2/DeepCRNN_model.pth
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

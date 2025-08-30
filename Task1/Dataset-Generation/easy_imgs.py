@@ -21,7 +21,7 @@ font_paths = [os.path.join(font_dir, font) for font in os.listdir(font_dir) if f
 train_font_paths = font_paths[:50]
 test_font_paths = font_paths[50: 65]
 
-with open('Task0/ai_wordlist.txt', 'r') as f:
+with open('Task1/ai_wordlist.txt', 'r') as f:
     words = [line.strip() for line in f.readlines()]
 
 

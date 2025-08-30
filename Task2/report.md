@@ -29,3 +29,47 @@
     - https://medium.com/@piyushkashyap045/understanding-pytorch-autograd-a-complete-guide-for-deep-learning-practitioners-f5dd1f43b417
     - https://pub.towardsai.net/optical-character-recognition-ocr-with-cnn-lstm-attention-seq2seq-538a57404de3
     - https://medium.com/@anishnama20/understanding-bidirectional-lstm-for-sequential-data-processing-b83d6283befc
+
+
+- Observations
+    - batch size 32. Tried with 8, not much improvement. Decided to stick to 32 since others took too much time to train
+    - after training on random generated words (50k images), now validating with the word list dataset
+        - smolCRNN trained on the Wordlist_dataset itself
+            - 100% accuracy on train
+            - 96% accuracy on test 
+            - most likely overfitted. So generated random datasets and tested again.       
+
+        - smolCRNN gets 
+                - Accuracy: 93.19% (46595/50000)
+                - Accuracy: 84.04% (12606/15000)
+                - Wordlist_captcha dataset
+                    - Accuracy: 74.17% (6379/8600) - wordlist train
+                    - Accuracy: 76.12% (1964/2580) - wordlist train
+            -  Increasing epochs from 15 to 30 did nothing.
+            - The low accuracy also means the smolCRNN model previously overfitted.
+        
+        - DeepCRNN gets (19M params)
+                - trained for 15 epochs
+                    - 90% accuracy on train set
+                    - 89% accuracy on test set
+                    - Testing on Wordlist_captcha dataset
+                        - Accuracy: 91.60% (7880/8600) - wordlist train part
+                        - Accuracy: 92.44% (2383/2580) - wordlist test part
+
+                - trained for 30 epochs
+                    - Accuracy: 96.12% (48060/50000) - train
+                    - Accuracy: 94.39% (14158/15000) - test
+                    - Testing on Wordlist_captcha dataset
+                        - Accuracy: 95.20% (8187/8600) - wordlist train part
+                        - Accuracy: 95.54% (2465/2580) - wordlist test part
+
+    - Initially I noticed the wordlist accuracy was low. This was because I accidently didn't generate captcha's with numbers and the wordlist dataset had words with numbers like "AIword1" to "AIword10". So I saw only 80% accuracy. Removing the numbers increased accuracy to 95%. Didn't retrain as it would take long, but it will surely work on numbers if needed.
+
+
+- Areas of Improvement:
+    - The model can be made more parameter efficient. The DeepCRNN model was implemented as it is from the paper to test accuracy. It has too large parameters. 
+    - Accuracy could be made higher by reducing batch_size and training for more epochs.
+    - Forgot to add numbers to the train dataset, maybe could try that later. Training takes hours.
+
+    - Solution:
+        - If time permits, Implement a model between DeepCRNN and smolCRNN with batch_size 8 or 4 for 100 epochs and then test the accruary.
