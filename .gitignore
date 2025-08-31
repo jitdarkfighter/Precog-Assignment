@@ -5,6 +5,9 @@
 /Task2/wordlist_captcha_images
 /Task2/captcha_images.zip
 /Task2/DeepCRNN_model.pth
+/Task3-Bonus/captcha_images
+/Task3-Bonus/wordlist_captcha_images
+/Task3-Bonus/captcha_images.zip
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

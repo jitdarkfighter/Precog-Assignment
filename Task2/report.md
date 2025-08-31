@@ -3,7 +3,7 @@
 
 - So i read this paper on CRNN. https://arxiv.org/abs/1507.05717
     - This paper suited our use case.
-    - Like the model used in problem 1, it has a convolution layer to get the spacial features.
+    - Like the model used in problem 1, it has a convolution layer to get the spacial features. The convolution layers here also resemble the VGG architecture.
     - Then from going from left to right on the feature maps generated, a vector of feature sequences is generated. This means the ith feature vector is the concatenation of the ith column of all maps.
     - This feature sequence is then the input to the Bi-directional LSTM. We need to use an RNN architecture here to get the sequence since the length of the captcha text isnt constant.
     - Then Transcription, it is the process of converting per frame predictions made by the RNN into a label sequence. 
@@ -24,6 +24,8 @@
     - Note: both should be together, one by itself wont work
         - Too much data on a low parameter model will not train well
         - Too less data on a large parameter model will cause it to overfit badly, as experieced before in Task 1.
+    
+    - Input size can be reshaped like the paper before passing it onto the model. Because of this my RNN input size is `512*11` dimensions, whereas in the paper is just 512. And that's also why in the paper the input to the lstm is `512*1*width`. This doesn't have too much issues just that the training wastes too many resources.
 
 - Articles Reffered too
     - https://medium.com/@piyushkashyap045/understanding-pytorch-autograd-a-complete-guide-for-deep-learning-practitioners-f5dd1f43b417
